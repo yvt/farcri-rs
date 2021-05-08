@@ -1,0 +1,16 @@
+[package]
+name = "farcri_example"
+version = "0.0.0"
+authors = ["yvt <i@yvt.jp>"]
+edition = "2018"
+publish = false
+
+[dependencies]
+
+[dev-dependencies]
+farcri = { path = ".." }
+
+[[bench]]
+name = "sort"
+harness = false
+

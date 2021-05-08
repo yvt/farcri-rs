@@ -1,0 +1,105 @@
+[workspace]
+members = [
+    ".",
+    "example",
+]
+
+[package]
+name = "farcri"
+version = "0.1.0"
+authors = ["yvt <i@yvt.jp>"]
+edition = "2018"
+
+[dependencies]
+arg_enum_proc_macro = { version = "0.3.0",  optional = true }
+panic-rtt-target = { version = "0.1.0",     optional = true,                           features = ["cortex-m"] }
+stm32f4xx-hal = { version = "0.8.3",        optional = true,                           features = ["rt"] }
+futures-core = { version = "0.3.5",         optional = true }
+probe-rs-rtt = { version = "0.3.0",         optional = true }
+cortex-m-rt = { version = "0.6.12",         optional = true,                           features = ["device"] }
+lazy_static = { version = "1.4.0",          optional = true }
+env_logger = { version = "0.8.1",           optional = true }
+rtt-target = { version = "0.2.0",           optional = true,                           features = ["cortex-m"] }
+serde_cbor = { version = "0.11.1",                          default-features = false }
+thiserror = { version = "1.0.20",           optional = true }
+tokenlock = { version = "0.3.4",                            default-features = false }
+arrayvec = { version = "0.7.0",                             default-features = false }
+cortex-m = { version = "0.7.2",             optional = true }
+probe-rs = { version = "0.8.0",             optional = true }
+futures = { version = "0.3.14",             optional = true }
+tempdir = { version = "0.3.7",              optional = true }
+anyhow = { version = "1.0.32",              optional = true }
+serde = { version = "1.0.125",                               default-features = false, features = ["derive"] }
+clap = { version = "3.0.0-beta.2",          optional = true,                           features = ["wrap_help"] }
+cryo = { version = "0.2.2",                                  default-features = false }
+rand = { version = "0.8.3",                 optional = true }
+log = { version = "0.4.11" }
+
+[dependencies.serde-json-core]
+# Waiting for v0.3.0...
+git = "https://github.com/rust-embedded-community/serde-json-core.git"
+rev = "da460d123e217f0e822a3977eb2170ed5d279d5e"
+
+[dependencies.goblin]
+version = "0.2.3"
+default-features = false
+features = ["std", "elf32"]
+optional = true
+
+[dependencies.tokio]
+version = "0.2.21"
+features = ["process", "macros", "time", "io-util", "io-std", "fs", "blocking", "sync"]
+optional = true
+
+[features]
+role_proxy = [
+    "arg_enum_proc_macro",
+    "serde-json-core/std",
+    "serde_cbor/std",
+    "futures-core",
+    "probe-rs-rtt",
+    "lazy_static",
+    "env_logger",
+    "thiserror",
+    "probe-rs",
+    "futures",
+    "tempdir",
+    "anyhow",
+    "goblin",
+    "tokio",
+    "clap",
+    "rand",
+]
+role_target = []
+
+# -------------------------------------------------------------------
+# Forwarded to dependencies
+max_level_off = ["log/max_level_off"]
+max_level_error = ["log/max_level_error"]
+max_level_warn = ["log/max_level_warn"]
+max_level_info = ["log/max_level_info"]
+max_level_debug = ["log/max_level_debug"]
+max_level_trace = ["log/max_level_trace"]
+
+# -------------------------------------------------------------------
+# Miscellaneous targets
+target_std = [
+    "lazy_static",
+]
+
+# -------------------------------------------------------------------
+# Cortex-M targets
+target_nucleo_f401re = [
+    "stm32f4xx-hal/stm32f401",
+    "panic-rtt-target",
+    "stm32f4xx-hal",
+    "cortex-m-rt",
+    "rtt-target",
+    "cortex-m",
+]
+
+# ease debugging
+[profile.release]
+debug = true
+opt-level = 0
+lto = false
