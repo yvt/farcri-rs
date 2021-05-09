@@ -17,10 +17,28 @@ macro_rules! criterion_group {
 }
 
 // -------------------------------------------------------------------------
-// Driver and proxy mode and rustdoc
+// Driver mode and rustdoc
 
 #[macro_export]
-#[cfg(not(feature = "role_target"))]
+#[cfg(not(any(feature = "role_target", feature = "role_proxy")))]
+macro_rules! criterion_main {
+    ( $( $group:path ),+ $(,)* ) => {
+        fn main() {
+            // suppress dead code warning
+            $(
+                let _: fn(&mut $crate::Criterion)  = $group;
+            )+
+
+            $crate::main(env!("CARGO_MANIFEST_DIR"));
+        }
+    }
+}
+
+// -------------------------------------------------------------------------
+// Proxy mode
+
+#[macro_export]
+#[cfg(feature = "role_proxy")]
 macro_rules! criterion_main {
     ( $( $group:path ),+ $(,)* ) => {
         fn main() {
