@@ -509,7 +509,7 @@ impl ReadWriteRtt {
         cx: &mut Context<'_>,
     ) -> Poll<tokio::io::Result<()>> {
         match &mut self.st {
-            ReadWriteRttRt::Idle { bufs, .. } => {
+            ReadWriteRttRt::Idle { .. } => {
                 // Start accessing RTT channels
                 let (mut bufs, mut rtt) = match replace(&mut self.st, ReadWriteRttRt::Invalid) {
                     ReadWriteRttRt::Idle { bufs, rtt, .. } => (bufs, rtt),
