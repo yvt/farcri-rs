@@ -6,11 +6,21 @@ pub struct BenchmarkId<'a> {
     pub(crate) parameter: Option<&'a dyn fmt::Display>,
 }
 
-impl BenchmarkId<'_> {
+impl<'a> BenchmarkId<'a> {
     pub(crate) fn no_function() -> Self {
         Self {
             function_name: None,
             parameter: None,
+        }
+    }
+
+    /// Construct a new benchmark ID from just a parameter value. Use this when benchmarking a
+    /// single function with a variety of different inputs.
+    #[inline]
+    pub fn from_parameter(parameter: &'a dyn fmt::Display) -> BenchmarkId {
+        BenchmarkId {
+            function_name: None,
+            parameter: Some(parameter),
         }
     }
 }

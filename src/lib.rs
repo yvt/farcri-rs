@@ -34,7 +34,9 @@ pub use self::target::main;
 // -------------------------------------------------------------------------
 
 mod bencher;
-pub use self::bencher::{black_box, time, Bencher, BenchmarkGroup, Criterion, Throughput};
+pub use self::bencher::{
+    black_box, time, Bencher, BenchmarkGroup, BenchmarkId, Criterion, Throughput,
+};
 
 mod utils {
     mod fmt;
