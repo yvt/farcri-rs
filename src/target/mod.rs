@@ -104,6 +104,7 @@ impl BencherIo {
         }
     }
 
+    #[inline(never)]
     pub fn now(&mut self) -> u64 {
         match () {
             #[cfg(feature = "cortex-m-rt")]
