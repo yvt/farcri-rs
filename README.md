@@ -5,6 +5,8 @@ WIP
 - [x] Basic measurement
 - [ ] Custom values (e.g., performance counters)
 - [ ] `Linear` sampling method
+- [ ] `std` target
+- [ ] Passing custom Cargo features
 - [x] Integration with [cargo-criterion]
 
 [cargo-criterion]: https://github.com/bheisler/cargo-criterion
