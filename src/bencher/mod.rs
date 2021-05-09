@@ -229,16 +229,15 @@ impl BenchmarkGroup<'_, '_> {
             } // protocol::Mode::Test
         } // match self.cri.mode
 
-        if false {
-            // Wait for a `Continue` message
-            log::debug!("Waiting for `Continue`...");
-            match self.cri.link.recv() {
-                protocol::DownstreamMessage::Continue => {}
-                other => {
-                    panic!("unexpected downstream message: {:?}", other);
-                }
+        // Wait for a `Continue` message
+        log::debug!("Waiting for `Continue`...");
+        match self.cri.link.recv() {
+            protocol::DownstreamMessage::Continue => {}
+            other => {
+                panic!("unexpected downstream message: {:?}", other);
             }
         }
+
         self
     }
 }
@@ -248,6 +247,15 @@ impl Drop for BenchmarkGroup<'_, '_> {
         let cri = &mut *self.cri;
         cri.link
             .send(&protocol::UpstreamMessage::FinishedBenchmarkGroup);
+
+        // Wait for a `Continue` message
+        log::debug!("Waiting for `Continue`...");
+        match cri.link.recv() {
+            protocol::DownstreamMessage::Continue => {}
+            other => {
+                panic!("unexpected downstream message: {:?}", other);
+            }
+        }
     }
 }
 
