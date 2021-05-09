@@ -100,9 +100,3 @@ target_nucleo_f401re = [
     "rtt-target",
     "cortex-m",
 ]
-
-# ease debugging
-[profile.release]
-debug = true
-opt-level = 0
-lto = false
