@@ -60,7 +60,7 @@ pub(crate) struct CyclesFormatter;
 
 impl CyclesFormatter {
     fn cycles_per_byte(&self, bytes: f64, typical: f64, values: &mut [f64]) -> &'static str {
-        let cycles_per_byte = bytes * (1e9 / typical);
+        let cycles_per_byte = typical / bytes;
         let (denominator, unit) = if cycles_per_byte < 1000.0 {
             (1.0, "  cycles/B")
         } else if cycles_per_byte < 1000.0 * 1000.0 {
@@ -80,15 +80,15 @@ impl CyclesFormatter {
     }
 
     fn cycles_per_element(&self, elems: f64, typical: f64, values: &mut [f64]) -> &'static str {
-        let cycles_per_element = elems * (1e9 / typical);
+        let cycles_per_element = typical / elems;
         let (denominator, unit) = if cycles_per_element < 1000.0 {
-            (1.0, " elem/s")
+            (1.0, " cycles/elem")
         } else if cycles_per_element < 1000.0 * 1000.0 {
-            (1000.0, "Kelem/s")
+            (1000.0, "Kcycles/elem")
         } else if cycles_per_element < 1000.0 * 1000.0 * 1000.0 {
-            (1000.0 * 1000.0, "Melem/s")
+            (1000.0 * 1000.0, "Mcycles/elem")
         } else {
-            (1000.0 * 1000.0 * 1000.0, "Gelem/s")
+            (1000.0 * 1000.0 * 1000.0, "Gcycles/elem")
         };
 
         for val in values {
