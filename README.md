@@ -5,26 +5,25 @@ WIP
 - [x] Basic measurement
 - [ ] Custom values (e.g., performance counters)
 - [ ] `Linear` sampling method
-- [ ] Integration with [cargo-criterion]
+- [x] Integration with [cargo-criterion]
 
 [cargo-criterion]: https://github.com/bheisler/cargo-criterion
 
 ## Try it
 
-*Prerequisites:* [NUCLEO-F401RE], Rust 1.51.0 or newer, and libusb1
+*Prerequisites:* [NUCLEO-F401RE], Rust 1.51.0 or newer, libusb1, and [cargo-criterion]
 
 ```
-$ env FARCRI_TARGET=nucleo_f401re cargo bench -p farcri_example
+$ env FARCRI_TARGET=nucleo_f401re cargo bench -p farcri_example --plotting-backend gnuplot
 [⋯ INFO  farcri::proxy::targets::probe_rs] Flashing '⋯/farcri-rs/target/thumbv7em-none-eabihf/release/deps/sort-8f14de0564ff7f2f'
- ⋮
-[⋯ INFO  farcri::proxy::dumbfront] BeginningBenchmark { id: RawBenchmarkId { group_id: "sort [i32; 100]", function_id: None, value_str: None, throughput: None } }
- ⋮
-[⋯ INFO  farcri::proxy::dumbfront] MeasurementComplete { num_iters_per_sample: 1092, values: [1713711, 1713711, 1713711, 1713952, 1713711, 1713711, 1713711, 1713711, 1713711, 1713711, 1713711, 1713711, 1713711, 1713952, 1713711, 1713711, 1713711, 1713711, 1713711, 1713711, 1713711, 1713711, 1713711, 1713952, 1713711, 1713711, 1713711, 1713711, 1713711, 1713711, 1713711, 1713711, 1713711, 1713953, 1713711, 1713711, 1713711, 1713711, 1713711, 1713711, 1713711, 1713711, 1713952, 1713711, 1713711, 1713711, 1713711, 1713711, 1713711, 1713711], benchmark_config: BenchmarkConfig { measurement_time: 5000000000ns, nresamples: 100000, sample_size: 50, warm_up_time: 3000000000ns } }
+       ⋮
+sort [i32; 100]         time:   [1.5693 Kcycles 1.5694 Kcycles 1.5694 Kcycles]
+                        change: [-0.0017% +0.0000% +0.0017%] (p = 0.96 > 0.05)
+                        No change in performance detected.
 ```
-
-From the output, we can observe that each `sort_unstable_by_key` operation on `[i32; 100]` takes about 1713711 / 1092 ≈ 1569.33 cycles on this target.
 
 [NUCLEO-F401RE]: https://www.st.com/en/evaluation-tools/nucleo-f401re.html
+[cargo-criterion]: https://github.com/bheisler/cargo-criterion
 
 ## Implementation
 

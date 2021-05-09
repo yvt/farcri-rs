@@ -48,7 +48,10 @@ optional = true
 
 [dependencies.tokio]
 version = "0.2.21"
-features = ["process", "macros", "time", "io-util", "io-std", "fs", "blocking", "sync"]
+features = [
+    "process", "macros", "time", "io-util", "io-std", "fs", "blocking", "sync",
+    "net",
+]
 optional = true
 
 [features]

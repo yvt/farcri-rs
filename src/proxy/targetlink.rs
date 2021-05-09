@@ -174,11 +174,14 @@ impl<Stream: AsyncRead + AsyncWrite> TargetLink<Stream> {
     pub(super) async fn recv(&mut self) -> Result<protocol::UpstreamMessage<String, Vec<u64>>> {
         let frame = slip::read_frame(&mut self.reader).await?;
         log::trace!("Received a SLIP frame {:?}", frame);
-        Ok(serde_cbor::from_slice(&frame)
-            .context("Failed to parse the received UpstreamMessage packet.")?)
+        let msg = serde_cbor::from_slice(&frame)
+            .context("Failed to parse the received UpstreamMessage packet.")?;
+        log::debug!("recv: {:?}", msg);
+        Ok(msg)
     }
 
     pub(super) async fn send(&mut self, msg: &protocol::DownstreamMessage<String>) -> Result<()> {
+        log::debug!("send: {:?}", msg);
         let frame = serde_cbor::to_vec(msg).unwrap();
         log::trace!("Sending a SLIP frame {:?}", frame);
         slip::write_frame(&mut self.writer, &frame).await?;

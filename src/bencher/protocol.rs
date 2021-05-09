@@ -83,10 +83,10 @@ pub(crate) enum UpstreamMessage<Str, Values> {
 #[derive(Debug, Serialize, Copy, Clone)]
 #[cfg_attr(feature = "role_proxy", derive(Deserialize))]
 pub(crate) struct RawBenchmarkId<Str> {
-    pub(super) group_id: Str,
-    pub(super) function_id: Option<Str>,
-    pub(super) value_str: Option<Str>,
-    pub(super) throughput: Option<Throughput>,
+    pub(crate) group_id: Str,
+    pub(crate) function_id: Option<Str>,
+    pub(crate) value_str: Option<Str>,
+    pub(crate) throughput: Option<Throughput>,
 }
 
 impl<Str: Borrow<str>> fmt::Display for RawBenchmarkId<Str> {

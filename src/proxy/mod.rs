@@ -4,7 +4,9 @@ use clap::Clap;
 
 use crate::bencher::protocol;
 
+mod ccfront;
 mod dumbfront;
+mod formatter;
 mod targetlink;
 mod targets;
 
@@ -216,9 +218,25 @@ async fn main_inner() -> Result<()> {
         .await
         .context("Failed to send the greeting message.")?;
 
-    // TODO: cargo-criterion front-end
-    log::info!("Using the dumb front-end");
-    dumbfront::run_frontend(target_link).await?;
+    if let Ok(port) = std::env::var("CARGO_CRITERION_PORT") {
+        let port: u16 = port.parse().with_context(|| {
+            format!(
+                "Could not parse the value of `CARGO_CRITERION_PORT` ({:?})",
+                port
+            )
+        })?;
+
+        log::info!("Using the CC front-end. Connecting to localhost:{}", port);
+
+        let cc_stream = tokio::net::TcpStream::connect(("localhost", port))
+            .await
+            .with_context(|| format!("Failed to connect to localhost:{}.", port))?;
+
+        ccfront::run_frontend(target_link, cc_stream).await?;
+    } else {
+        log::info!("`CARGO_CRITERION_PORT` is not set; using the dumb front-end");
+        dumbfront::run_frontend(target_link).await?;
+    }
 
     Ok(())
 }
