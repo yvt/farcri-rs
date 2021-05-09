@@ -1,13 +1,16 @@
-# FarCri.rs: Criterion.rs on Remote Target
+# FarCri.rs: [Criterion.rs] on Remote Target
+
+[Criterion.rs]: https://github.com/bheisler/criterion.rs
 
 WIP
 
 - [x] Basic measurement
+- [x] Integration with [cargo-criterion]
 - [ ] Custom values (e.g., performance counters)
 - [ ] `Linear` sampling method
 - [ ] `std` target
+- [ ] Binary size measurement
 - [ ] Passing custom Cargo features
-- [x] Integration with [cargo-criterion]
 
 [cargo-criterion]: https://github.com/bheisler/cargo-criterion
 
@@ -42,7 +45,7 @@ sort [i32]/256          time:   [3.5197 Kcycles 3.5197 Kcycles 3.5198 Kcycles]
 
 ## Implementation
 
-User benchmark crates use the `criterion_main!` macro exported by this library. In a single Cargo build run, this library is built in one of *Driver mode*, *Host mode*, *Proxy mode*, and *Target mode*. The mode decision is done by Cargo features `role_*` and affects the expansion result of exported macros, dictating what role the compiled executable takes.
+User benchmark crates use the `criterion_main!` macro exported by this library. In each Cargo build run, this library is built in *Driver mode*, *Host mode*, *Proxy mode*, or *Target mode*. The mode decision is done by Cargo features `role_*` and affects the expansion result of exported macros, dictating what role the compiled executable takes.
 
 
                      You
@@ -72,9 +75,9 @@ User benchmark crates use the `criterion_main!` macro exported by this library. 
                                                            host ╵ target
                                                                 ╵
 
- - By default (i.e., when the user does `cargo bench` or `cargo criterion`), this library is built in *Driver mode*, in which case `criterion_main!` produces a main function that invokes Cargo to build and run the current benchmark target (i.e., it instructs Cargo to build itself) in Proxy mode. This mode is selected by the absence of Cargo features, so it cannot depend on any other crates requiring `std` (dependencies are always additive in Cargo). This is very restrictive, which is why this mode exists separately from Proxy mode.
+ - By default (i.e., when the user does `cargo bench` or `cargo criterion`), this library is built in *Driver mode*, in which case `criterion_main!` produces a main function that invokes Cargo to build and run the current benchmark target (i.e., it uses Cargo to rebuild itself) in Proxy mode. This mode is selected by the absence of Cargo features, so it cannot depend on any other crates requiring `std` (dependencies are always additive in Cargo). This is very restrictive, which is why this mode exists separately from Proxy mode.
 
- - *Proxy mode* is selected by a private Cargo feature named `role_proxy`. In Proxy mode, the compiled executable takes the role of conducting the actual benchmark execution on a remote target device. First, it invokes Cargo to build the current benchmark target (i.e., it instructs Cargo to build itself) with an additional parameter that causes this library to be built in Target mode. After that, it runs the compiled program on the target device and forwards the measurement result to `cargo-criterion`. (It's a user error to run the benchmark outside `cargo-criterion`.)
+ - *Proxy mode* is selected by a private Cargo feature named `role_proxy`. In Proxy mode, the compiled executable takes the role of coordinating the actual benchmark execution on a remote target device. First, it invokes Cargo to build the current benchmark target (i.e., it uses Cargo to rebuild itself) with an additional parameter that causes this library to be built in Target mode. After that, it runs the compiled program on the target device and forwards messages concerning the measurement results to `cargo-criterion`.
 
  - *Target mode* is selected by a private Cargo feature named `role_target` and other target-specific features. The Target mode executable is supposed to run on a remote target device, which usually has no operating system and requires a `no_std` environment. The compiled executable of Target mode runs the actual benchmark code and transmits the measurement result back to the Proxy mode program running on the host system through a target-specific transport mechanism.
 
