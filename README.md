@@ -17,9 +17,22 @@ WIP
 $ env FARCRI_TARGET=nucleo_f401re cargo bench -p farcri_example --plotting-backend gnuplot
 [⋯ INFO  farcri::proxy::targets::probe_rs] Flashing '⋯/farcri-rs/target/thumbv7em-none-eabihf/release/deps/sort-8f14de0564ff7f2f'
        ⋮
-sort [i32; 100]         time:   [1.5693 Kcycles 1.5694 Kcycles 1.5694 Kcycles]
-                        change: [-0.0017% +0.0000% +0.0017%] (p = 0.96 > 0.05)
-                        No change in performance detected.
+noop                    time:   [10.005 cycles 10.005 cycles 10.006 cycles]
+
+sort [i32]/1            time:   [71.021 cycles 71.022 cycles 71.023 cycles]
+                        thrpt:  [71.023  cycles/elem 71.022  cycles/elem 71.021  cycles/elem]
+
+sort [i32]/4            time:   [188.04 cycles 188.04 cycles 188.05 cycles]
+                        thrpt:  [47.012  cycles/elem 47.011  cycles/elem 47.011  cycles/elem]
+
+sort [i32]/16           time:   [1.4423 Kcycles 1.4424 Kcycles 1.4424 Kcycles]
+                        thrpt:  [90.148  cycles/elem 90.147  cycles/elem 90.146  cycles/elem]
+
+sort [i32]/64           time:   [1.1193 Kcycles 1.1194 Kcycles 1.1194 Kcycles]
+                        thrpt:  [17.490  cycles/elem 17.490  cycles/elem 17.490  cycles/elem]
+
+sort [i32]/256          time:   [3.5197 Kcycles 3.5197 Kcycles 3.5198 Kcycles]
+                        thrpt:  [13.749  cycles/elem 13.749  cycles/elem 13.749  cycles/elem]
 ```
 
 [NUCLEO-F401RE]: https://www.st.com/en/evaluation-tools/nucleo-f401re.html
