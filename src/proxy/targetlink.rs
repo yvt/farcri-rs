@@ -33,7 +33,10 @@ impl<Stream: AsyncRead + AsyncWrite> TargetLink<Stream> {
         let mut nonce: [u8; protocol::HANDSHAKE_NONCE_LEN] = rand::thread_rng().gen();
         for x in nonce.iter_mut() {
             if *x == protocol::HANDSHAKE_MAGIC[0] || *x == protocol::HANDSHAKE_END_MAGIC[0] {
-                *x += 1;
+                *x = 255;
+                assert!(
+                    *x != protocol::HANDSHAKE_MAGIC[0] && *x != protocol::HANDSHAKE_END_MAGIC[0]
+                );
             }
         }
         let mut handshake_packet = protocol::HANDSHAKE_MAGIC.to_owned();
