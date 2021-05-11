@@ -1,6 +1,13 @@
-# FarCri.rs: Criterion.rs on Remote Target
+<img src="doc/banner.jpg" alt="FarCri.rs">
 
-*FarCri.rs* is a benchmark framework for constrained systems (e.g., microcontrollers) based on [Criterion.rs]. It includes a shrunken-down version of Criterion\.rs's measurement code that runs on a target system and a host program that mediates the communication between the target system and the [cargo-criterion] frontend.
+<p align="center">
+FarCri.rs: Criterion.rs for Remote Targets
+</p>
+<p align="center">
+<a href="https://docs.rs/farcri/"><img src="https://docs.rs/farcri/badge.svg" alt="docs.rs"></a> <a href="https://crates.io/crates/farcri"><img src="https://img.shields.io/crates/v/farcri"></a> <img src="https://img.shields.io/badge/license-MIT%2FApache--2.0-blue">
+</p>
+
+FarCri\.rs is a benchmark framework for constrained systems (e.g., microcontrollers) based on [Criterion.rs]. It includes a shrunken-down version of Criterion\.rs's measurement code that runs on a target system and a host program that mediates the communication between the target system and the [cargo-criterion] frontend.
 
 [Criterion.rs]: https://github.com/bheisler/criterion.rs
 [cargo-criterion]: https://github.com/bheisler/cargo-criterion
