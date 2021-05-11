@@ -1,22 +1,55 @@
-# FarCri.rs: [Criterion.rs] on Remote Target
+# FarCri.rs: Criterion.rs on Remote Target
+
+*FarCri.rs* is a benchmark framework for constrained systems (e.g., microcontrollers) based on [Criterion.rs]. It includes a shrunken-down version of Criterion\.rs's measurement code that runs on a target system and a host program that mediates the communication between the target system and the [cargo-criterion] frontend.
 
 [Criterion.rs]: https://github.com/bheisler/criterion.rs
-
-WIP
+[cargo-criterion]: https://github.com/bheisler/cargo-criterion
 
 - [x] Basic measurement
-- [x] Integration with [cargo-criterion]
+- [x] Integration with cargo-criterion
 - [ ] Custom values (e.g., performance counters)
 - [ ] `Linear` sampling method
 - [ ] `std` target
 - [ ] Binary size measurement
 - [ ] Passing custom Cargo features
 
-[cargo-criterion]: https://github.com/bheisler/cargo-criterion
+## Example
+
+`benches/example.rs`:
+
+```rust
+#![no_std]
+#![cfg_attr(target_os = "none", no_main)]
+
+use farcri::{criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
+
+fn criterion_benchmark(c: &mut Criterion) {
+    c.bench_function("expensive_calculation", |b| b.iter(|| {
+        /* do expensive calculation */
+    }));
+}
+
+criterion_group!(benches, criterion_benchmark);
+criterion_main!(benches);
+```
+
+`Cargo.toml`:
+
+```toml
+  ⋮
+
+[dev-dependencies.farcri]
+git = "https://github.com/yvt/farcri-rs.git"
+rev = "..."
+
+[[bench]]
+name = "example"
+harness = false
+```
 
 ## Try it
 
-*Prerequisites:* [NUCLEO-F401RE], Rust 1.51.0 or newer, libusb1, and [cargo-criterion]
+*Prerequisites:* a [NUCLEO-F401RE] development board, Rust 1.51.0 or newer, libusb1, and [cargo-criterion]
 
 ```
 $ env FARCRI_TARGET=nucleo_f401re cargo bench -p farcri_example --plotting-backend gnuplot
