@@ -240,6 +240,12 @@ impl BenchmarkGroup<'_, '_> {
 
         self
     }
+
+    /// Consume the benchmark group and generate the summary reports for the group.
+    ///
+    /// It is recommended to call this explicitly, but if you forget it will be called when the
+    /// group is dropped.
+    pub fn finish(self) {}
 }
 
 impl Drop for BenchmarkGroup<'_, '_> {
