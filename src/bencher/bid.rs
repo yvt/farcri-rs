@@ -7,6 +7,15 @@ pub struct BenchmarkId<'a> {
 }
 
 impl<'a> BenchmarkId<'a> {
+    /// Construct a new benchmark ID from a string function name and a parameter value.
+    #[inline]
+    pub fn new(function_name: &'a dyn fmt::Display, parameter: &'a dyn fmt::Display) -> Self {
+        BenchmarkId {
+            function_name: Some(function_name),
+            parameter: Some(parameter),
+        }
+    }
+
     pub(crate) fn no_function() -> Self {
         Self {
             function_name: None,
